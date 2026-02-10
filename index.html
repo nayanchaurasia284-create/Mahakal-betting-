@@ -1,55 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8">
-  <title>Reddy Cricket Book</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mahakal Book</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<!-- HEADER -->
-<header class="hero">
-  <h1>Reddy Cricket Book</h1>
-  <p>India’s Trusted Online Cricket Platform</p>
-  <a href="https://wa.me/919999999999" class="btn">Get Cricket ID</a>
+<header class="top">
+  <div class="logo">MAHAKAL BOOK</div>
+  <div class="bal">₹<span id="bal">1000</span></div>
 </header>
 
-<!-- SERVICES -->
-<section class="services">
-  <div class="box">
-    <h2>🏏 Instant Cricket ID</h2>
-    <p>Get your demo cricket ID instantly via WhatsApp.</p>
+<div class="tabs">
+  <span class="active">Sports</span>
+  <a href="live.html">Live</a>
+</div>
+
+<div class="match">
+  <div class="teams">IND vs AUS</div>
+  <div class="odds">
+    <button onclick="openSlip('IND vs AUS',1.85)">1.85</button>
+    <button onclick="openSlip('IND vs AUS',2.10)">2.10</button>
   </div>
+</div>
 
-  <div class="box">
-    <h2>⚡ Fast Withdrawal</h2>
-    <p>Quick & smooth withdrawal system (demo).</p>
+<div class="match">
+  <div class="teams">CSK vs MI</div>
+  <div class="odds">
+    <button onclick="openSlip('CSK vs MI',1.90)">1.90</button>
+    <button onclick="openSlip('CSK vs MI',2.05)">2.05</button>
   </div>
+</div>
 
-  <div class="box">
-    <h2>📱 24x7 Support</h2>
-    <p>Our team is always available for you.</p>
-  </div>
-</section>
+<!-- BET SLIP -->
+<div id="slip" class="slip hide">
+  <h4>Bet Slip</h4>
+  <p id="m"></p>
+  <p>Odds: <b id="o"></b></p>
+  <input id="amt" type="number" placeholder="Stake ₹">
+  <button onclick="placeBet()">Place Bet</button>
+  <button class="close" onclick="closeSlip()">Close</button>
+</div>
 
-<!-- MATCH SECTION -->
-<section class="matches">
-  <h2>Live Cricket Matches</h2>
-  <p>IPL | T20 | ODI | Test Matches Available</p>
-</section>
+<nav class="bottom">
+  <a class="active">Sports</a>
+  <a href="mybets.html">My Bets</a>
+  <a href="wallet.html">Wallet</a>
+  <a href="login.html">Login</a>
+</nav>
 
-<!-- CTA -->
-<section class="cta">
-  <h2>Start Playing Today</h2>
-  <a href="https://wa.me/919999999999" class="btn">WhatsApp Now</a>
-</section>
-
-<!-- FOOTER -->
-<footer>
-  <p>© 2026 Reddy Cricket Book | Demo Website</p>
-  <p>This website is for demo & educational purposes only.</p>
-</footer>
-
+<script src="js/script.js"></script>
 </body>
 </html>
