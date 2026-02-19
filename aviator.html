@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 Aviator - Real Crash Game</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0c0c1e 0%, #1a0033 50%, #0f0f23 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .game-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 20px;
+            height: 100vh;
+            align-content: start;
+        }
+
+        .sky {
+            height: 70vh;
+            background: linear-gradient(to bottom, #87CEEB 0%, #98D8C8 50%, #B8E6E6 100%);
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 20px;
+        }
+
+        .multiplier {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: clamp(2.5rem, 8vw, 6rem);
+            font-weight: bold;
+            color: #fff;
+            text-shadow: 0 0 20px #00ff88, 0 0 40px #00ff88;
+            z-index: 100;
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.05); }
+        }
+
+        .controls {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 50;
+        }
+
+        .bet-input, .btn {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            backdrop-filter: blur(10px);
+        }
+
+        .bet-input {
+            background: rgba(255,255,255,0.1);
+            color: white;
+            width: 140px;
+            text-align: center;
+        }
+
+        .btn {
+            padding: 15px 35px;
+            min-width: 120px;
+        }
+
+        .bet-btn {
+            background: linear-gradient(45deg, #00ff88, #00cc66);
+            color: #000;
+            box-shadow: 0 10px 30px rgba(0,255,136,0.4);
+        }
+
+        .cashout-btn {
+            background: linear-gradient(45deg, #ff6b35, #f7931e);
+            color: white;
+            box-shadow: 0 10px 30px rgba(255,107,53,0.4);
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .stats {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            right: 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 20px;
+            font-weight: bold;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+        }
+
+        .sidebar {
+            background: rgba(0,0,0,0.8);
+            border-radius: 20px;
+            padding: 25px;
+            height: fit-content;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .balance {
+            font-size: 28px;
+            margin-bottom: 25px;
+            color: #00ff88;
+            text-align: center;
+        }
+
+        .history {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .history h3 {
+            margin-bottom: 15px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .history-item {
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 10px;
+            font-weight: bold;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .win { background: rgba(0,255,136,0.2); color: #00ff88; }
+        .crash { background: rgba(255,68,68,0.3); color: #ff4444; }
+
+        .status {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: #fff;
+            text-align: center;
+            z-index: 100;
+        }
+
+        @media (max-width: 768px) {
+            .game-container {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+            .controls { flex-direction: column; width: 200px; }
+            .stats { flex-direction: column; gap: 10px; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="sky">
+            <canvas id="gameCanvas"></canvas>
+            <div class="stats">
+                <div>💰 Balance: $<span id="balance">1000</span></div>
+                <div>🎯 Bet: $<span id="betAmount">100</span></div>
+                <div>💵 Win: $<span id="winAmount">0</span></div>
+            </div>
+            <div class="multiplier" id="multiplier">1.00x</div>
+            <div class="status" id="statusMsg"></div>
+            <div class="controls">
+                <input type="number" id="betInput" class="bet-input" value="100" min="10" max="500">
+                <button id="betBtn" class="btn bet-btn">BET</button>
+                <button id="cashoutBtn" class="btn cashout-btn" disabled>CASHOUT</button>
+            </div>
+        </div>
+        
+        <div class="sidebar">
+            <div class="balance">💎 $<span id="sidebarBalance">1000</span></div>
+            <div class="history">
+                <h3>📈 Round History</h3>
+                <div id="historyList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class AviatorGame {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.balance = 1000;
+                this.betAmount = 100;
+                this.multiplier = 1;
+                this.gameState = 'waiting'; // waiting, countdown, flying, crashed
+                this.history = [];
+                this.planeX = 50;
+                this.planeY = 0;
+                this.crashMultiplier = 1;
+                this.betPlaced = false;
+                this.gameSpeed = 0.3;
+                this.lastTime = 0;
+
+                this.init();
+                window.addEventListener('resize', () => this.resize());
+            }
+
+            init() {
+                this.resize();
+                this.bindEvents();
+                this.gameLoop();
+            }
+
+            resize() {
+                this.canvas.width = this.canvas.offsetWidth;
+                this.canvas.height = this.canvas.offsetHeight;
+                this.planeY = this.canvas.height * 0.4;
+            }
+
+            bindEvents() {
+                document.getElementById('betBtn').onclick = () => this.placeBet();
+                document.getElementById('cashoutBtn').onclick = () => this.cashout();
+                document.getElementById('betInput').oninput = (e) => {
+                    this.betAmount = Math.max(10, Math.min(500, parseInt(e.target.value) || 100));
+                    this.updateUI();
+                };
+            }
+
+            placeBet() {
+                if (this.gameState !== 'waiting' || this.betAmount > this.balance) return;
+
+                this.betPlaced = true;
+                this.gameState = 'countdown';
+                document.getElementById('betBtn').disabled = true;
+                document.getElementById('cashoutBtn').disabled = false;
+
+                let countdown = 5;
+                const timer = setInterval(() => {
+                    if (countdown <= 0) {
+                        clearInterval(timer);
+                        this.startFlight();
+                        return;
+                    }
+                    document.getElementById('multiplier').textContent = `${countdown}s`;
+                    countdown--;
+                }, 1000);
+            }
+
+            startFlight() {
+                this.gameState = 'flying';
+                this.multiplier = 1.00;
+                this.planeX = 50;
+
+                // Real Aviator algorithm: 85% <2x, 10% <3x, 5% 3x+
+                const rand = Math.random();
+                if (rand < 0.85) {
+                    this.crashMultiplier = 1 + Math.random() * 0.99; // 1x-2x
+                } else if (rand < 0.95) {
+                    this.crashMultiplier = 2 + Math.random() * 1; // 2x-3x
+                } else {
+                    this.crashMultiplier = 3 + Math.random() * 50; // 3x-53x
+                }
+            }
+
+            cashout() {
+                if (this.gameState !== 'flying' || !this.betPlaced) return;
+
+                const win = this.betAmount * this.multiplier;
+                this.balance += win;
+                this.addHistory(`${this.multiplier.toFixed(2)}x`, 'win', `+$${win.toFixed(0)}`);
+                this.endGame();
+            }
+
+            endGame() {
+                this.betPlaced = false;
+                this.gameState = 'crashed';
+                
+                if (this.betPlaced) {
+                    this.addHistory(`${this.crashMultiplier.toFixed(2)}x`, 'crash', `-$${this.betAmount}`);
+                }
+                
+                setTimeout(() => {
+                    this.gameState = 'waiting';
+                    document.getElementById('multiplier').textContent = '1.00x';
+                    document.getElementById('betBtn').disabled = false;
+                    document.getElementById('cashoutBtn').disabled = true;
+                    this.multiplier = 1;
+                    this.planeX = 50;
+                }, 3000);
+            }
+
+            addHistory(multiplier, type, amount) {
+                this.history.unshift({ multiplier, type, amount });
+                if (this.history.length > 12) this.history.pop();
+                const list = document.getElementById('historyList');
+                list.innerHTML = this.history.map(h => 
+                    `<div class="history-item ${h.type}">${h.multiplier}x ${h.amount}</div>`
+                ).join('');
+            }
+
+            updateUI() {
+                document.getElementById('balance').textContent = this.balance.toFixed(0);
+                document.getElementById('sidebarBalance').textContent = this.balance.toFixed(0);
+                document.getElementById('betAmount').textContent = this.betAmount.toFixed(0);
+                document.getElementById('winAmount').textContent = (this.betAmount * this.multiplier).toFixed(0);
+                document.getElementById('betInput').value = this.betAmount;
+            }
+
+            update(deltaTime) {
+                if (this.gameState === 'flying') {
+                    this.multiplier += deltaTime * this.gameSpeed;
+                    this.planeX += deltaTime * 80;
+                    
+                    document.getElementById('multiplier').textContent = `${this.multiplier.toFixed(2)}x`;
+                    
+                    if (this.multiplier >= this.crashMultiplier) {
+                        this.endGame();
+                    }
+                }
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Clouds
+                this.ctx.fillStyle = 'rgba(255,255,255,0.7)';
+                for (let i = 0; i < 6; i++) {
+                    const x = (this.planeX * 0.2 + i * 150 - 200) % (this.canvas.width + 200);
+                    const y = 80 + i * 60;
+                    this.ctx.beginPath();
+                    this.ctx.arc(x, y, 35, 0, Math.PI * 2);
+                    this.ctx.arc(x + 45, y, 45, 0, Math.PI * 2);
+                    this.ctx.arc(x + 90, y, 35, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+
+                // Plane trail
+                const gradient = this.ctx.createLinearGradient(this.planeX - 120, this.planeY, this.planeX, this.planeY);
+                gradient.addColorStop(0, 'rgba(135,206,235,0.3)');
+                gradient.addColorStop(1, 'rgba(135,206,235,0)');
+                this.ctx.fillStyle = gradient;
+                this.ctx.fillRect(this.planeX - 140, this.planeY - 8, 140, 16);
+
+                // Plane
+                this.ctx.save();
+                this.ctx.translate(this.planeX, this.planeY);
+                this.ctx.rotate(Math.sin(this.planeX * 0.02) * 0.15);
+                
+                // Plane body
+                this.ctx.fillStyle = '#2d3748';
+                this.ctx.fillRect(-12, -4, 24, 8);
+                
+                // Wings
+                this.ctx.fillStyle = '#4a5568';
+                this.ctx.beginPath();
+                this.ctx.moveTo(12, 0);
+                this.ctx.lineTo(32, -8);
+                this.ctx.lineTo(32, 8);
+                this.ctx.fill();
+                
+                // Propeller
+                this.ctx.fillStyle = '#718096';
+                this.ctx.beginPath();
+                this.ctx.arc(-15, 0, 6, 0, Math.PI * 2);
+                this.ctx.fill();
+                
+                this.ctx.restore();
+
+                // Crash explosion
+                if (this.gameState === 'crashed' && this.planeX > 100) {
+                    this.ctx.fillStyle = 'rgba(255, 69, 0, 0.6)';
+                    this.ctx.beginPath();
+                    this.ctx.arc(this.planeX, this.planeY, 60, 0, Math.PI * 2);
+                    this.ctx.fill();
+                    this.ctx.fillStyle = 'rgba(255, 140, 0, 0.4)';
+                    this.ctx.beginPath();
+                    this.ctx.arc(this.planeX, this.planeY, 90, 0, Math.PI * 2);
+                    this.ctx.fill();
+                }
+            }
+
+            gameLoop(currentTime) {
+                const deltaTime = (currentTime - this.lastTime) / 1000;
+                this.lastTime = currentTime;
+
+                this.update(deltaTime);
+                this.draw();
+                this.updateUI();
+
+                requestAnimationFrame((time) => this.gameLoop(time));
+            }
+        }
+
+        // Start Game
+        const game = new AviatorGame();
+    </script>
+</body>
+</html>
