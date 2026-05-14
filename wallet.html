@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>91 CLUB - Wallet</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;background:#f2f2f7;max-width:430px;margin:0 auto;min-height:100vh}
+.hdr{background:linear-gradient(90deg,#f1402f,#c0392b);height:52px;display:flex;align-items:center;padding:0 14px;gap:10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.back{background:none;border:none;color:#fff;font-size:24px;cursor:pointer;line-height:1;padding:4px}
+.hdr h2{font-size:17px;font-weight:800;color:#fff}
+
+/* BALANCE HERO */
+.bal-hero{background:linear-gradient(135deg,#f1402f,#c0392b);padding:24px 20px 28px;text-align:center}
+.bh-lbl{font-size:13px;color:rgba(255,255,255,.7);font-weight:600;margin-bottom:6px}
+.bh-amt{font-size:38px;font-weight:900;color:#fff;letter-spacing:-1px}
+.bh-rs{font-size:22px;margin-right:2px}
+.bh-sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:6px}
+.bh-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:18px;padding:0 10px}
+.bh-btn{padding:13px;border-radius:13px;border:none;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;color:#fff;display:flex;align-items:center;justify-content:center;gap:6px;transition:.15s}
+.bh-btn:active{transform:scale(.96)}
+.bh-wd{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3)}
+.bh-dp{background:#fff;color:#f1402f}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:14px 12px}
+.sbox{background:#fff;border-radius:12px;padding:12px 8px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sbox-val{font-size:18px;font-weight:900}
+.sbox-val.green{color:#27ae60}
+.sbox-val.red{color:#f1402f}
+.sbox-val.gold{color:#f5a623}
+.sbox-lbl{font-size:10px;color:#888;margin-top:3px}
+
+/* FILTER */
+.filter-row{display:flex;gap:8px;padding:0 12px 10px;overflow-x:auto;scrollbar-width:none}
+.filter-row::-webkit-scrollbar{display:none}
+.ftab{flex-shrink:0;padding:7px 16px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;background:#fff;color:#888;border:1.5px solid #eee;transition:.2s}
+.ftab.active{background:#f1402f;color:#fff;border-color:#f1402f}
+
+/* TRANSACTION LIST */
+.tx-list{padding:0 12px 20px;display:flex;flex-direction:column;gap:8px}
+.tx-card{background:#fff;border-radius:13px;padding:13px 14px;box-shadow:0 2px 8px rgba(0,0,0,.06);display:flex;align-items:center;gap:12px;animation:slideUp .3s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.tx-ico{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.tx-ico.win{background:#e8faf0}
+.tx-ico.loss{background:#fdecea}
+.tx-ico.pending{background:#fff8e1}
+.tx-info{flex:1}
+.tx-title{font-size:13px;font-weight:700;color:#111}
+.tx-sub{font-size:11px;color:#888;margin-top:2px}
+.tx-right{text-align:right}
+.tx-amt{font-size:14px;font-weight:900}
+.tx-amt.win{color:#27ae60}
+.tx-amt.loss{color:#f1402f}
+.tx-amt.pending{color:#f5a623}
+.tx-time{font-size:10px;color:#bbb;margin-top:2px}
+.empty-state{text-align:center;padding:50px 20px;color:#bbb}
+.empty-state div{font-size:40px;margin-bottom:12px}
+.empty-state p{font-size:13px}
+
+/* WA MODAL */
+.moverlay{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:.25s}
+.moverlay.show{opacity:1;pointer-events:all}
+.wa-sheet{background:#fff;border-radius:22px 22px 0 0;width:100%;max-width:430px;margin:0 auto;padding:24px 20px 36px;transform:translateY(100%);transition:.3s;text-align:center}
+.moverlay.show .wa-sheet{transform:translateY(0)}
+.mhandle{width:40px;height:4px;background:#e5e5e5;border-radius:2px;margin:0 auto 18px}
+.wa-ic{font-size:44px;margin-bottom:10px}
+.wa-ti{font-size:18px;font-weight:900;color:#111;margin-bottom:5px}
+.wa-ds{font-size:13px;color:#888;margin-bottom:18px;line-height:1.5}
+.wa-link{display:flex;align-items:center;justify-content:center;gap:8px;background:#25D366;color:#fff;padding:14px;border-radius:13px;text-decoration:none;font-size:15px;font-weight:800;margin-bottom:10px;box-shadow:0 4px 14px rgba(37,211,102,.35)}
+.mcancel{width:100%;padding:11px;background:#f5f5f5;border:none;border-radius:11px;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;color:#888;cursor:pointer}
+
+/* BOTTOM NAV */
+.bnav{background:#fff;border-top:1px solid #eee;display:flex;padding:5px 0 10px;position:sticky;bottom:0;z-index:90;box-shadow:0 -2px 10px rgba(0,0,0,.06)}
+.bnt{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 4px;cursor:pointer;font-size:10px;font-weight:700;color:#bbb}
+.bnt.active{color:#f1402f}
+.bni{font-size:20px}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <button class="back" onclick="go('home.html')">‹</button>
+  <h2>Wallet & History</h2>
+</div>
+
+<!-- BALANCE HERO -->
+<div class="bal-hero">
+  <div class="bh-lbl">Total Balance</div>
+  <div class="bh-amt"><span class="bh-rs">₹</span><span id="balAmt">0.00</span></div>
+  <div class="bh-sub">Available to play & withdraw</div>
+  <div class="bh-btns">
+    <button class="bh-btn bh-wd" onclick="openWA('withdraw')">💸 Withdraw</button>
+    <button class="bh-btn bh-dp" onclick="openWA('deposit')">💰 Deposit</button>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats-row">
+  <div class="sbox"><div class="sbox-val green" id="st-won">₹0</div><div class="sbox-lbl">Total Won</div></div>
+  <div class="sbox"><div class="sbox-val red" id="st-lost">₹0</div><div class="sbox-lbl">Total Lost</div></div>
+  <div class="sbox"><div class="sbox-val gold" id="st-bets">0</div><div class="sbox-lbl">Total Bets</div></div>
+</div>
+
+<!-- FILTER -->
+<div class="filter-row">
+  <div class="ftab active" onclick="filter('all',this)">All</div>
+  <div class="ftab" onclick="filter('win',this)">Won ✅</div>
+  <div class="ftab" onclick="filter('loss',this)">Lost ❌</div>
+  <div class="ftab" onclick="filter('pending',this)">Pending ⏳</div>
+</div>
+
+<!-- LIST -->
+<div class="tx-list" id="txList">
+  <div style="text-align:center;padding:30px;color:#bbb;font-size:13px">Loading...</div>
+</div>
+
+<!-- WA MODAL -->
+<div class="moverlay" id="waModal" onclick="closeWA(event)">
+  <div class="wa-sheet">
+    <div class="mhandle"></div>
+    <div class="wa-ic" id="waIc">💬</div>
+    <div class="wa-ti" id="waTi">Support</div>
+    <div class="wa-ds" id="waDs">Contact us on WhatsApp.</div>
+    <a class="wa-link" id="waLnk" href="#" target="_blank">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      Chat on WhatsApp
+    </a>
+    <button class="mcancel" onclick="closeWA()">Cancel</button>
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="bnav">
+  <div class="bnt" onclick="go('home.html')"><span class="bni">🏠</span>Home</div>
+  <div class="bnt active"><span class="bni">💰</span>Wallet</div>
+  <div class="bnt" onclick="go('vip.html')"><span class="bni">👑</span>VIP</div>
+  <div class="bnt" onclick="go('refer.html')"><span class="bni">🎁</span>Refer</div>
+  <div class="bnt" onclick="go('profile.html')"><span class="bni">👤</span>Profile</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, collection, query, where, orderBy, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSyDB_ymNmTN9eFoY9amgRbLJoeTjRzF61HE",
+  authDomain:"club-5d681.firebaseapp.com",
+  projectId:"club-5d681",
+  storageBucket:"club-5d681.firebasestorage.app",
+  messagingSenderId:"424424836125",
+  appId:"1:424424836125:web:5ca5709b23bcea63228af4"
+});
+const db = getFirestore(app);
+const auth = getAuth(app);
+const WA = '918517923368';
+
+let CU = null, allBets = [], curFilter = 'all';
+
+window.go = url => window.location.href = url;
+
+onAuthStateChanged(auth, async user => {
+  if (!user) { window.location.href = 'index.html'; return; }
+  const snap = await getDoc(doc(db,'users',user.uid));
+  if (!snap.exists()) { window.location.href = 'index.html'; return; }
+  CU = { uid: user.uid, ...snap.data() };
+  document.getElementById('balAmt').textContent = parseFloat(CU.balance||0).toFixed(2);
+
+  // Real-time bets listener
+  const q = query(collection(db,'bets'), where('uid','==',CU.uid), orderBy('time','desc'));
+  onSnapshot(q, sn => {
+    allBets = sn.docs.map(d=>({id:d.id,...d.data()}));
+    updateStats();
+    renderList();
+  });
+
+  // Real-time balance
+  const unsub = onSnapshot(doc(db,'users',CU.uid), snap => {
+    if (snap.exists()) {
+      CU = {...CU, ...snap.data()};
+      document.getElementById('balAmt').textContent = parseFloat(CU.balance||0).toFixed(2);
+    }
+  });
+});
+
+function updateStats() {
+  const won = allBets.filter(b=>b.status==='win').reduce((s,b)=>s+(b.winAmount||0),0);
+  const lost = allBets.filter(b=>b.status==='loss').reduce((s,b)=>s+(b.total||0),0);
+  document.getElementById('st-won').textContent = '₹'+won.toFixed(0);
+  document.getElementById('st-lost').textContent = '₹'+lost.toFixed(0);
+  document.getElementById('st-bets').textContent = allBets.length;
+}
+
+function renderList() {
+  const list = document.getElementById('txList');
+  const filtered = curFilter==='all' ? allBets : allBets.filter(b=>b.status===curFilter);
+  if (!filtered.length) {
+    list.innerHTML = `<div class="empty-state"><div>${curFilter==='win'?'🏆':curFilter==='loss'?'😢':'🎲'}</div><p>No ${curFilter==='all'?'transactions':curFilter+' bets'} yet</p></div>`;
+    return;
+  }
+  list.innerHTML = filtered.map(b => `
+    <div class="tx-card">
+      <div class="tx-ico ${b.status}">${b.status==='win'?'🏆':b.status==='loss'?'❌':'⏳'}</div>
+      <div class="tx-info">
+        <div class="tx-title">Bet: ${b.choice} × X${b.mult}</div>
+        <div class="tx-sub">Period: ${(b.period||'—').slice(-8)} · Staked: ₹${b.total}</div>
+      </div>
+      <div class="tx-right">
+        <div class="tx-amt ${b.status}">
+          ${b.status==='win'?'+₹'+b.winAmount:b.status==='loss'?'-₹'+b.total:'₹'+b.total+' ⏳'}
+        </div>
+        <div class="tx-time">${b.time?new Date(b.time).toLocaleString('en-IN',{hour:'2-digit',minute:'2-digit',day:'2-digit',month:'short'}):'—'}</div>
+      </div>
+    </div>`).join('');
+}
+
+window.filter = (f, el) => {
+  curFilter = f;
+  document.querySelectorAll('.ftab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  renderList();
+};
+
+window.openWA = type => {
+  const ic={withdraw:'💸',deposit:'💰'};
+  const ti={withdraw:'Withdraw Money',deposit:'Deposit Money'};
+  const ds={withdraw:'Contact us on WhatsApp to withdraw your winnings. Fast processing!',deposit:'Contact us on WhatsApp to deposit. Instant credit to your account!'};
+  document.getElementById('waIc').textContent=ic[type];
+  document.getElementById('waTi').textContent=ti[type];
+  document.getElementById('waDs').textContent=ds[type];
+  document.getElementById('waLnk').href=`https://wa.me/${WA}?text=Hello%20I%20want%20to%20${type}%20in%2091Club`;
+  document.getElementById('waModal').classList.add('show');
+};
+window.closeWA = e => { if(!e||e.target.id==='waModal') document.getElementById('waModal').classList.remove('show'); };
+</script>
+</body>
+</html>

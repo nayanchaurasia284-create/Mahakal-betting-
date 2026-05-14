@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>91 CLUB - VIP</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;background:linear-gradient(180deg,#1a0a00,#3d1500,#1a0500);max-width:430px;margin:0 auto;min-height:100vh}
+.hdr{background:rgba(0,0,0,.3);height:52px;display:flex;align-items:center;padding:0 14px;gap:10px;position:sticky;top:0;z-index:100;backdrop-filter:blur(10px);border-bottom:1px solid rgba(255,255,255,.06)}
+.back{background:none;border:none;color:#ffd700;font-size:24px;cursor:pointer}
+.hdr h2{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:#ffd700;letter-spacing:1px}
+
+.hero{text-align:center;padding:24px 20px 16px}
+.hero h1{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:#ffd700;letter-spacing:2px}
+.hero p{font-size:12px;color:rgba(255,255,255,.45);margin-top:5px}
+
+/* MY VIP CARD */
+.my-vip{background:rgba(255,255,255,.07);border:1px solid rgba(255,215,0,.2);border-radius:16px;margin:0 14px 16px;padding:16px 18px;display:flex;align-items:center;gap:14px}
+.mv-badge{font-size:36px;flex-shrink:0}
+.mv-info{flex:1}
+.mv-name{font-size:16px;font-weight:800;color:#ffd700}
+.mv-xp{font-size:12px;color:rgba(255,255,255,.45);margin-top:3px}
+.mv-prog{height:6px;background:rgba(255,255,255,.1);border-radius:3px;margin-top:8px;overflow:hidden}
+.mv-fill{height:100%;background:linear-gradient(90deg,#ffd700,#f97316);border-radius:3px;transition:.6s}
+.mv-next{font-size:11px;color:rgba(255,255,255,.3);margin-top:5px}
+
+/* VIP LEVEL CARDS */
+.vip-cards{padding:0 14px 20px;display:flex;flex-direction:column;gap:10px}
+.vlcard{border-radius:16px;padding:16px 18px;display:flex;align-items:center;justify-content:space-between;border:2px solid transparent;transition:.3s;position:relative;overflow:hidden}
+.vlcard.current{border-color:#ffd700;box-shadow:0 0 24px rgba(255,215,0,.25)}
+.vlcard.done{border-color:#38c976}
+.vlcard.locked{opacity:.45}
+.vlcard::before{content:'';position:absolute;inset:0;background:rgba(255,255,255,.03);pointer-events:none}
+.vl0c{background:linear-gradient(135deg,#374151,#1f2937)}
+.vl1c{background:linear-gradient(135deg,#78716c,#44403c)}
+.vl2c{background:linear-gradient(135deg,#9ca3af,#6b7280)}
+.vl3c{background:linear-gradient(135deg,#f59e0b,#b45309)}
+.vl4c{background:linear-gradient(135deg,#06b6d4,#0891b2)}
+.vl5c{background:linear-gradient(135deg,#9333ea,#6b21a8)}
+.vl-left{display:flex;align-items:center;gap:12px}
+.vl-ic{font-size:28px}
+.vl-nm{font-size:15px;font-weight:800;color:#fff}
+.vl-req{font-size:11px;color:rgba(255,255,255,.5);margin-top:2px}
+.vl-right{text-align:right}
+.vl-bonus{font-size:20px;font-weight:900;color:#ffd700}
+.vl-blbl{font-size:10px;color:rgba(255,255,255,.4);margin-top:2px}
+.current-badge{position:absolute;top:8px;right:8px;background:#ffd700;color:#7b3f00;font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px}
+.done-badge{position:absolute;top:8px;right:8px;background:#38c976;color:#fff;font-size:9px;font-weight:800;padding:2px 7px;border-radius:10px}
+
+/* HOW TO EARN */
+.howto{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:14px;margin:0 14px 20px;padding:16px}
+.howto h3{font-size:13px;font-weight:800;color:#ffd700;margin-bottom:12px}
+.hw-item{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.hw-item:last-child{margin:0}
+.hw-ico{font-size:20px;flex-shrink:0}
+.hw-txt{font-size:12px;color:rgba(255,255,255,.6);line-height:1.4}
+.hw-txt strong{color:#ffd700}
+
+/* BNAV */
+.bnav{background:rgba(0,0,0,.5);border-top:1px solid rgba(255,255,255,.06);display:flex;padding:5px 0 10px;position:sticky;bottom:0;z-index:90;backdrop-filter:blur(10px)}
+.bnt{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 4px;cursor:pointer;font-size:10px;font-weight:700;color:rgba(255,255,255,.3)}
+.bnt.active{color:#ffd700}
+.bni{font-size:20px}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <button class="back" onclick="go('home.html')">‹</button>
+  <h2>👑 VIP CLUB</h2>
+</div>
+
+<div class="hero">
+  <h1>VIP LEVELS</h1>
+  <p>Bet more · Earn XP · Level up · Get rewards</p>
+</div>
+
+<!-- MY VIP -->
+<div class="my-vip">
+  <div class="mv-badge" id="myBadge">🥉</div>
+  <div class="mv-info">
+    <div class="mv-name" id="myVipName">VIP 0 — Bronze</div>
+    <div class="mv-xp" id="myXP">0 XP</div>
+    <div class="mv-prog"><div class="mv-fill" id="myFill" style="width:0%"></div></div>
+    <div class="mv-next" id="myNext">0 / 1000 XP to next level</div>
+  </div>
+</div>
+
+<!-- VIP CARDS -->
+<div class="vip-cards" id="vipCards"></div>
+
+<!-- HOW TO EARN -->
+<div class="howto">
+  <h3>📈 How to Earn XP</h3>
+  <div class="hw-item"><div class="hw-ico">🎯</div><div class="hw-txt">Win a bet → <strong>10 XP</strong> per ₹1 staked</div></div>
+  <div class="hw-item"><div class="hw-ico">🎲</div><div class="hw-txt">Lose a bet → <strong>5 XP</strong> per ₹1 staked</div></div>
+  <div class="hw-item"><div class="hw-ico">🎁</div><div class="hw-txt">Refer a friend → <strong>100 XP</strong> bonus</div></div>
+  <div class="hw-item"><div class="hw-ico">📅</div><div class="hw-txt">Daily login → <strong>10 XP</strong> bonus</div></div>
+</div>
+
+<div class="bnav">
+  <div class="bnt" onclick="go('home.html')"><span class="bni">🏠</span>Home</div>
+  <div class="bnt" onclick="go('wallet.html')"><span class="bni">💰</span>Wallet</div>
+  <div class="bnt active"><span class="bni">👑</span>VIP</div>
+  <div class="bnt" onclick="go('refer.html')"><span class="bni">🎁</span>Refer</div>
+  <div class="bnt" onclick="go('profile.html')"><span class="bni">👤</span>Profile</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSyDB_ymNmTN9eFoY9amgRbLJoeTjRzF61HE",
+  authDomain:"club-5d681.firebaseapp.com",
+  projectId:"club-5d681",
+  storageBucket:"club-5d681.firebasestorage.app",
+  messagingSenderId:"424424836125",
+  appId:"1:424424836125:web:5ca5709b23bcea63228af4"
+});
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+window.go = url => window.location.href = url;
+
+const VIP = [
+  {name:'Bronze',xp:0,bonus:'FREE',blbl:'Entry',icon:'🥉',cls:'vl0c'},
+  {name:'Silver',xp:1000,bonus:'+5%',blbl:'Win Bonus',icon:'🥈',cls:'vl1c'},
+  {name:'Gold',xp:5000,bonus:'+10%',blbl:'Win Bonus',icon:'🥇',cls:'vl2c'},
+  {name:'Diamond',xp:20000,bonus:'+20%',blbl:'Win Bonus',icon:'💎',cls:'vl3c'},
+  {name:'Sapphire',xp:50000,bonus:'+30%',blbl:'Win Bonus',icon:'🔷',cls:'vl4c'},
+  {name:'Royal',xp:100000,bonus:'+50%',blbl:'Win Bonus',icon:'👑',cls:'vl5c'},
+];
+
+onAuthStateChanged(auth, user => {
+  if (!user) { window.location.href = 'index.html'; return; }
+  onSnapshot(doc(db,'users',user.uid), snap => {
+    if (!snap.exists()) return;
+    const d = snap.data();
+    const xp = d.xp||0;
+    let lvl = 0;
+    for (let i = VIP.length-1; i >= 0; i--) { if (xp >= VIP[i].xp) { lvl = i; break; } }
+    const curr = VIP[lvl], next = VIP[lvl+1];
+    document.getElementById('myBadge').textContent = curr.icon;
+    document.getElementById('myVipName').textContent = `VIP ${lvl} — ${curr.name}`;
+    document.getElementById('myXP').textContent = xp.toLocaleString() + ' XP';
+    if (next) {
+      const pct = Math.min(100,((xp-curr.xp)/(next.xp-curr.xp))*100);
+      document.getElementById('myFill').style.width = pct+'%';
+      document.getElementById('myNext').textContent = `${xp.toLocaleString()} / ${next.xp.toLocaleString()} XP to VIP ${lvl+1}`;
+    } else {
+      document.getElementById('myFill').style.width = '100%';
+      document.getElementById('myNext').textContent = '🎉 Maximum VIP level reached!';
+    }
+    // Render cards
+    const container = document.getElementById('vipCards');
+    container.innerHTML = VIP.map((v,i) => {
+      const state = i < lvl ? 'done' : i === lvl ? 'current' : 'locked';
+      const badge = state==='current' ? '<div class="current-badge">CURRENT</div>' : state==='done' ? '<div class="done-badge">✓ DONE</div>' : '';
+      return `<div class="vlcard ${v.cls} ${state}">
+        ${badge}
+        <div class="vl-left">
+          <div class="vl-ic">${v.icon}</div>
+          <div>
+            <div class="vl-nm">VIP ${i} — ${v.name}</div>
+            <div class="vl-req">${i===0?'Starting level':v.xp.toLocaleString()+' XP required'}</div>
+          </div>
+        </div>
+        <div class="vl-right">
+          <div class="vl-bonus">${v.bonus}</div>
+          <div class="vl-blbl">${v.blbl}</div>
+        </div>
+      </div>`;
+    }).join('');
+  });
+});
+</script>
+</body>
+</html>

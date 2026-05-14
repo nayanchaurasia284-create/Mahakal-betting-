@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>91 CLUB - Refer</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;background:#f2f2f7;max-width:430px;margin:0 auto;min-height:100vh}
+.hdr{background:linear-gradient(90deg,#f1402f,#c0392b);height:52px;display:flex;align-items:center;padding:0 14px;gap:10px;position:sticky;top:0;z-index:100;box-shadow:0 2px 10px rgba(0,0,0,.2)}
+.back{background:none;border:none;color:#fff;font-size:24px;cursor:pointer}
+.hdr h2{font-size:17px;font-weight:800;color:#fff}
+
+.hero{background:linear-gradient(135deg,#f1402f,#c0392b);padding:22px 18px 26px;text-align:center}
+.hero h2{font-size:22px;font-weight:900;color:#fff}
+.hero p{font-size:13px;color:rgba(255,255,255,.75);margin-top:6px;line-height:1.4}
+.code-box{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:14px;padding:14px 18px;margin-top:16px;display:flex;align-items:center;justify-content:space-between}
+.code-txt{font-family:'Rajdhani',sans-serif;font-size:24px;font-weight:700;color:#fff;letter-spacing:4px}
+.copy-btn{background:#fff;color:#f1402f;border:none;border-radius:9px;padding:8px 16px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;transition:.15s}
+.copy-btn:active{transform:scale(.95)}
+
+/* HOW IT WORKS */
+.how-section{padding:14px 12px}
+.how-section h3{font-size:14px;font-weight:800;color:#111;margin-bottom:12px}
+.hw-steps{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.hw-step{background:#fff;border-radius:12px;padding:14px 8px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.hw-step .icon{font-size:24px;margin-bottom:6px}
+.hw-step .title{font-size:12px;font-weight:700;color:#111}
+.hw-step .desc{font-size:10px;color:#888;margin-top:3px;line-height:1.3}
+
+/* STATS */
+.stats{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;padding:0 12px 14px}
+.sbox{background:#fff;border-radius:12px;padding:14px 8px;text-align:center;box-shadow:0 2px 8px rgba(0,0,0,.06)}
+.sv{font-size:20px;font-weight:900;color:#f1402f}
+.sl{font-size:10px;color:#888;margin-top:3px}
+
+/* SHARE BUTTONS */
+.share-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 12px 14px}
+.share-btn{padding:12px;border-radius:12px;border:none;font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;color:#fff;transition:.15s}
+.share-btn:active{transform:scale(.96)}
+.sb-wa{background:#25D366;box-shadow:0 3px 12px rgba(37,211,102,.3)}
+.sb-cp{background:#f1402f;box-shadow:0 3px 12px rgba(241,64,47,.3)}
+
+/* USER LIST */
+.list-hdr{padding:0 12px 8px;font-size:13px;font-weight:700;color:#888}
+.ref-list{padding:0 12px 20px;display:flex;flex-direction:column;gap:8px}
+.rcard{background:#fff;border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:10px;box-shadow:0 2px 6px rgba(0,0,0,.05);animation:slideUp .3s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.rav{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#f1402f,#7950f2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0}
+.rinfo{flex:1}
+.rname{font-size:13px;font-weight:700;color:#111}
+.rdate{font-size:11px;color:#888;margin-top:1px}
+.rearn{font-size:13px;font-weight:800;color:#27ae60}
+.empty{text-align:center;padding:40px 20px;color:#bbb}
+.empty div{font-size:40px;margin-bottom:10px}
+.empty p{font-size:13px}
+
+/* BNAV */
+.bnav{background:#fff;border-top:1px solid #eee;display:flex;padding:5px 0 10px;position:sticky;bottom:0;z-index:90;box-shadow:0 -2px 10px rgba(0,0,0,.06)}
+.bnt{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 4px;cursor:pointer;font-size:10px;font-weight:700;color:#bbb}
+.bnt.active{color:#f1402f}
+.bni{font-size:20px}
+
+.toast{position:fixed;bottom:76px;left:50%;transform:translateX(-50%) translateY(80px);background:#1f2937;color:#fff;padding:11px 22px;border-radius:28px;font-size:13px;font-weight:700;z-index:700;transition:.3s;white-space:nowrap}
+.toast.show{transform:translateX(-50%) translateY(0)}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <button class="back" onclick="go('home.html')">‹</button>
+  <h2>Refer & Earn</h2>
+</div>
+
+<div class="hero">
+  <h2>🎁 Invite & Earn</h2>
+  <p>Share your code. Friend joins & you both get <strong style="color:#ffd700">₹50 bonus!</strong></p>
+  <div class="code-box">
+    <span class="code-txt" id="myCode">—</span>
+    <button class="copy-btn" onclick="copyCode()">📋 Copy</button>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="how-section">
+  <h3>How it works</h3>
+  <div class="hw-steps">
+    <div class="hw-step"><div class="icon">📤</div><div class="title">Share Code</div><div class="desc">Send your referral code to friends</div></div>
+    <div class="hw-step"><div class="icon">✅</div><div class="title">Friend Joins</div><div class="desc">They register with your code</div></div>
+    <div class="hw-step"><div class="icon">💰</div><div class="title">You Earn</div><div class="desc">₹50 credited instantly!</div></div>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="sbox"><div class="sv" id="refCount">0</div><div class="sl">Total Referred</div></div>
+  <div class="sbox"><div class="sv" id="refEarned">₹0</div><div class="sl">Total Earned</div></div>
+  <div class="sbox"><div class="sv" id="refActive">0</div><div class="sl">Active Users</div></div>
+</div>
+
+<!-- SHARE BUTTONS -->
+<div class="share-row">
+  <button class="share-btn sb-wa" onclick="shareWA()">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+    Share on WhatsApp
+  </button>
+  <button class="share-btn sb-cp" onclick="copyCode()">📋 Copy Link</button>
+</div>
+
+<!-- REFERRED USERS -->
+<div class="list-hdr">Your Referred Users</div>
+<div class="ref-list" id="refList">
+  <div style="text-align:center;padding:20px;color:#bbb;font-size:13px">Loading...</div>
+</div>
+
+<div class="bnav">
+  <div class="bnt" onclick="go('home.html')"><span class="bni">🏠</span>Home</div>
+  <div class="bnt" onclick="go('wallet.html')"><span class="bni">💰</span>Wallet</div>
+  <div class="bnt" onclick="go('vip.html')"><span class="bni">👑</span>VIP</div>
+  <div class="bnt active"><span class="bni">🎁</span>Refer</div>
+  <div class="bnt" onclick="go('profile.html')"><span class="bni">👤</span>Profile</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSyDB_ymNmTN9eFoY9amgRbLJoeTjRzF61HE",
+  authDomain:"club-5d681.firebaseapp.com",
+  projectId:"club-5d681",
+  storageBucket:"club-5d681.firebasestorage.app",
+  messagingSenderId:"424424836125",
+  appId:"1:424424836125:web:5ca5709b23bcea63228af4"
+});
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+window.go = url => window.location.href = url;
+
+let myRefCode = '';
+const WA = '918517923368';
+
+const toast = msg => {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(window._tt); window._tt=setTimeout(()=>t.classList.remove('show'),2500);
+};
+
+onAuthStateChanged(auth, async user => {
+  if (!user) { window.location.href = 'index.html'; return; }
+  const snap = await getDoc(doc(db,'users',user.uid));
+  if (!snap.exists()) { window.location.href = 'index.html'; return; }
+  const d = snap.data();
+  myRefCode = d.refCode || '';
+  document.getElementById('myCode').textContent = myRefCode;
+
+  // Load referred users
+  try {
+    const q = query(collection(db,'users'), where('referredBy','==',myRefCode));
+    const sn = await getDocs(q);
+    const refs = sn.docs.map(d=>d.data());
+    document.getElementById('refCount').textContent = refs.length;
+    document.getElementById('refEarned').textContent = '₹'+(refs.length*50);
+    document.getElementById('refActive').textContent = refs.filter(u=>(u.xp||0)>0).length;
+
+    const list = document.getElementById('refList');
+    if (!refs.length) {
+      list.innerHTML = `<div class="empty"><div>👥</div><p>No referrals yet.<br>Share your code and start earning!</p></div>`;
+      return;
+    }
+    list.innerHTML = refs.map(u=>`
+      <div class="rcard">
+        <div class="rav">${u.name[0].toUpperCase()}</div>
+        <div class="rinfo">
+          <div class="rname">${u.name}</div>
+          <div class="rdate">Joined: ${u.joinDate||'—'} · XP: ${u.xp||0}</div>
+        </div>
+        <div class="rearn">+₹50</div>
+      </div>`).join('');
+  } catch(e) {
+    document.getElementById('refList').innerHTML = '<div style="text-align:center;padding:20px;color:#bbb;font-size:13px">Error loading referrals</div>';
+  }
+});
+
+window.copyCode = () => {
+  const msg = `Join 91Club and win big! Use my referral code: ${myRefCode}\nRegister here: ${window.location.origin}`;
+  navigator.clipboard.writeText(myRefCode).then(()=>toast('✅ Code copied: '+myRefCode)).catch(()=>toast('Code: '+myRefCode));
+};
+
+window.shareWA = () => {
+  const msg = encodeURIComponent(`🎮 Join 91Club - India's #1 Color Prediction Game!\n\nUse my referral code: *${myRefCode}*\n\nWe both get ₹50 bonus! 🎁\n\nRegister now!`);
+  window.open(`https://wa.me/?text=${msg}`, '_blank');
+};
+</script>
+</body>
+</html>

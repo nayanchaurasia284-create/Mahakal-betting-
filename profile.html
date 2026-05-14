@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>91 CLUB - Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',sans-serif;background:#f2f2f7;max-width:430px;margin:0 auto;min-height:100vh}
+.hero{background:linear-gradient(135deg,#f1402f,#c0392b);padding:40px 20px 28px;text-align:center}
+.av{width:74px;height:74px;border-radius:50%;background:rgba(255,255,255,.2);margin:0 auto 12px;display:flex;align-items:center;justify-content:center;font-size:32px;border:3px solid rgba(255,255,255,.4)}
+.pname{font-size:20px;font-weight:800;color:#fff}
+.pphone{font-size:13px;color:rgba(255,255,255,.65);margin-top:4px}
+.pvip{display:inline-block;background:#ffd700;color:#7b3f00;font-size:11px;font-weight:800;padding:3px 14px;border-radius:20px;margin-top:10px}
+.pbal{font-size:22px;font-weight:900;color:#fff;margin-top:14px}
+.pbal span{font-size:14px;opacity:.8}
+
+.menu{padding:14px 12px}
+.mitem{background:#fff;border-radius:13px;padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:8px;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.05);transition:.15s}
+.mitem:active{transform:scale(.98);background:#fafafa}
+.mic{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.mtxt{flex:1}
+.mt{font-size:13px;font-weight:700;color:#111}
+.ms{font-size:11px;color:#888;margin-top:1px}
+.marr{color:#ccc;font-size:18px;font-weight:700}
+
+.logout-btn{width:calc(100% - 24px);margin:6px 12px 24px;padding:14px;background:#fff;border:1.5px solid #f1402f;color:#f1402f;border-radius:13px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;transition:.15s}
+.logout-btn:active{background:#f1402f;color:#fff}
+
+.bnav{background:#fff;border-top:1px solid #eee;display:flex;padding:5px 0 10px;position:sticky;bottom:0;z-index:90;box-shadow:0 -2px 10px rgba(0,0,0,.06)}
+.bnt{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 4px;cursor:pointer;font-size:10px;font-weight:700;color:#bbb}
+.bnt.active{color:#f1402f}
+.bni{font-size:20px}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="av">👤</div>
+  <div class="pname" id="pname">—</div>
+  <div class="pphone" id="pphone">—</div>
+  <div class="pvip" id="pvip">VIP 0 — Bronze</div>
+  <div class="pbal">₹<span id="pbal">0.00</span> <span>Balance</span></div>
+</div>
+
+<div class="menu">
+  <div class="mitem" onclick="go('wallet.html')">
+    <div class="mic" style="background:#fff8e1">💰</div>
+    <div class="mtxt"><div class="mt">Wallet & Transactions</div><div class="ms">View all bets & history</div></div>
+    <div class="marr">›</div>
+  </div>
+  <div class="mitem" onclick="go('vip.html')">
+    <div class="mic" style="background:#fef9c3">👑</div>
+    <div class="mtxt"><div class="mt">VIP Status</div><div class="ms" id="vipSub">Bronze — 0 XP</div></div>
+    <div class="marr">›</div>
+  </div>
+  <div class="mitem" onclick="go('refer.html')">
+    <div class="mic" style="background:#f0fdf4">🎁</div>
+    <div class="mtxt"><div class="mt">Refer & Earn</div><div class="ms">₹50 per friend you invite</div></div>
+    <div class="marr">›</div>
+  </div>
+  <div class="mitem" onclick="openWA()">
+    <div class="mic" style="background:#f0fdf4">💬</div>
+    <div class="mtxt"><div class="mt">Customer Support</div><div class="ms">WhatsApp 24/7</div></div>
+    <div class="marr">›</div>
+  </div>
+  <div class="mitem">
+    <div class="mic" style="background:#f0f4ff">ℹ️</div>
+    <div class="mtxt"><div class="mt">App Version</div><div class="ms">91Club v2.0 — Firebase</div></div>
+  </div>
+</div>
+
+<button class="logout-btn" onclick="doLogout()">🚪 Logout</button>
+
+<div class="bnav">
+  <div class="bnt" onclick="go('home.html')"><span class="bni">🏠</span>Home</div>
+  <div class="bnt" onclick="go('wallet.html')"><span class="bni">💰</span>Wallet</div>
+  <div class="bnt" onclick="go('vip.html')"><span class="bni">👑</span>VIP</div>
+  <div class="bnt" onclick="go('refer.html')"><span class="bni">🎁</span>Refer</div>
+  <div class="bnt active"><span class="bni">👤</span>Profile</div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSyDB_ymNmTN9eFoY9amgRbLJoeTjRzF61HE",
+  authDomain:"club-5d681.firebaseapp.com",
+  projectId:"club-5d681",
+  storageBucket:"club-5d681.firebasestorage.app",
+  messagingSenderId:"424424836125",
+  appId:"1:424424836125:web:5ca5709b23bcea63228af4"
+});
+const db = getFirestore(app);
+const auth = getAuth(app);
+const WA = '918517923368';
+const VIP = [{name:'Bronze',xp:0},{name:'Silver',xp:1000},{name:'Gold',xp:5000},{name:'Diamond',xp:20000},{name:'Sapphire',xp:50000},{name:'Royal',xp:100000}];
+
+window.go = url => window.location.href = url;
+
+onAuthStateChanged(auth, user => {
+  if (!user) { window.location.href = 'index.html'; return; }
+  // Real-time profile listener
+  onSnapshot(doc(db,'users',user.uid), snap => {
+    if (!snap.exists()) { window.location.href = 'index.html'; return; }
+    const d = snap.data();
+    let lvl = 0;
+    for (let i = VIP.length-1; i >= 0; i--) { if ((d.xp||0) >= VIP[i].xp) { lvl = i; break; } }
+    document.getElementById('pname').textContent = d.name;
+    document.getElementById('pphone').textContent = d.phone;
+    document.getElementById('pvip').textContent = `VIP ${lvl} — ${VIP[lvl].name}`;
+    document.getElementById('pbal').textContent = parseFloat(d.balance||0).toFixed(2);
+    document.getElementById('vipSub').textContent = `${VIP[lvl].name} — ${d.xp||0} XP`;
+  });
+});
+
+window.openWA = () => window.open(`https://wa.me/${WA}?text=Hello%20I%20need%20support%20for%2091Club`, '_blank');
+
+window.doLogout = async () => {
+  await signOut(auth);
+  sessionStorage.removeItem('cu');
+  window.location.href = 'index.html';
+};
+</script>
+</body>
+</html>
