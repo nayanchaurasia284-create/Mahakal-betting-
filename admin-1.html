@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>91 CLUB - Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--red:#f1402f;--green:#00e676;--gold:#ffd700;--bg:#0a0a14;--card:rgba(255,255,255,.04);--border:rgba(255,255,255,.07)}
+body{font-family:'Nunito',sans-serif;background:var(--bg);max-width:430px;margin:0 auto;min-height:100vh;color:#fff}
+
+/* HEADER */
+.hdr{background:linear-gradient(90deg,#12122a,#1a1a38);height:56px;display:flex;align-items:center;padding:0 14px;gap:10px;position:sticky;top:0;z-index:100;border-bottom:1px solid rgba(255,215,0,.15);box-shadow:0 2px 20px rgba(0,0,0,.4)}
+.hdr-logo{display:flex;align-items:center;gap:8px;flex:1}
+.hdr-lc{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,#f1402f,#c0392b);display:flex;align-items:center;justify-content:center;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:#fff;box-shadow:0 2px 8px rgba(241,64,47,.4)}
+.hdr-title{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--gold);letter-spacing:1px}
+.hdr-badge{background:linear-gradient(135deg,#f1402f,#c0392b);color:#fff;font-size:10px;font-weight:800;padding:3px 9px;border-radius:6px;letter-spacing:.5px}
+.logout-btn{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.5);font-size:11px;font-weight:700;padding:6px 12px;border-radius:8px;cursor:pointer;font-family:'Nunito',sans-serif;transition:.15s}
+.logout-btn:active{background:rgba(255,255,255,.12)}
+
+/* LIVE INDICATOR */
+.live-strip{background:linear-gradient(90deg,rgba(0,230,118,.08),rgba(0,230,118,.03));border-bottom:1px solid rgba(0,230,118,.12);padding:7px 14px;display:flex;align-items:center;justify-content:space-between}
+.live-left{display:flex;align-items:center;gap:7px}
+.ldot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:lp 1s infinite;flex-shrink:0}
+@keyframes lp{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.ltxt{font-size:11px;color:var(--green);font-weight:700}
+.live-period{font-size:10px;color:rgba(255,255,255,.3)}
+
+/* TABS */
+.tabs{display:flex;padding:12px 12px 0;gap:6px;overflow-x:auto;scrollbar-width:none;position:sticky;top:56px;z-index:99;background:var(--bg);padding-bottom:10px;border-bottom:1px solid var(--border)}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:8px 15px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;background:var(--card);color:rgba(255,255,255,.35);border:1px solid var(--border);font-family:'Nunito',sans-serif;transition:.2s}
+.tab.active{background:linear-gradient(135deg,#f1402f,#c0392b);color:#fff;border-color:#f1402f;box-shadow:0 3px 12px rgba(241,64,47,.3)}
+
+.acont{display:none;padding-bottom:80px}
+.acont.active{display:block}
+
+/* ══ OVERVIEW ══ */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px 12px 0}
+.sbox{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px 16px;position:relative;overflow:hidden}
+.sbox::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.03),transparent);pointer-events:none}
+.sbox-val{font-size:22px;font-weight:900}
+.sbox-lbl{font-size:11px;color:rgba(255,255,255,.35);margin-top:3px}
+.sbox-trend{font-size:11px;margin-top:6px;font-weight:700}
+.tr-g{color:var(--green)}.tr-y{color:var(--gold)}.tr-r{color:#f1402f}
+
+/* LIVE GAME BOX in admin */
+.game-box{margin:14px 12px 0;background:linear-gradient(135deg,#12122a,#1a1a38);border:1px solid rgba(255,215,0,.15);border-radius:16px;overflow:hidden}
+.gb-hdr{background:linear-gradient(90deg,#f1402f,#c0392b);padding:10px 14px;display:flex;align-items:center;justify-content:space-between}
+.gb-hdr-l{font-size:12px;font-weight:700;color:#fff;display:flex;align-items:center;gap:6px}
+.gb-hdr-r{text-align:right}
+.gb-tlbl{font-size:10px;color:rgba(255,255,255,.7);margin-bottom:2px}
+.gb-tdisp{display:flex;gap:3px;align-items:center}
+.tblk{background:rgba(0,0,0,.4);color:var(--gold);font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;padding:2px 6px;border-radius:5px;min-width:26px;text-align:center}
+.tblk.blink{animation:tblink .15s}
+@keyframes tblink{0%,100%{background:rgba(0,0,0,.4)}50%{background:rgba(192,57,43,.6)}}
+.tsep{color:var(--gold);font-size:18px;font-weight:900}
+
+.gb-body{padding:12px 14px}
+.gb-period{font-size:11px;color:rgba(255,255,255,.3);margin-bottom:10px}
+.gb-period strong{color:rgba(255,255,255,.6)}
+
+/* Last results in admin */
+.gb-results{display:flex;gap:5px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.gb-lbl{font-size:11px;color:rgba(255,255,255,.3);margin-right:2px}
+.ab-ball{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#fff;box-shadow:0 2px 8px rgba(0,0,0,.3);flex-shrink:0;animation:bpop .3s ease}
+@keyframes bpop{from{transform:scale(0)}to{transform:scale(1)}}
+
+.gb-last{font-size:12px;color:rgba(255,255,255,.3);display:flex;align-items:center;gap:8px}
+.gb-last-num{font-size:22px;font-weight:900;color:var(--gold)}
+.gb-last-lbl{font-size:11px;color:rgba(255,255,255,.3)}
+
+/* ══ USERS ══ */
+.section-title{font-size:11px;font-weight:700;color:rgba(255,255,255,.3);padding:14px 12px 8px;text-transform:uppercase;letter-spacing:.5px;display:flex;align-items:center;justify-content:space-between}
+.section-title span{color:var(--gold);font-size:12px}
+.ucard{background:var(--card);border:1px solid var(--border);border-radius:13px;padding:12px 13px;margin:0 12px 8px;display:flex;align-items:center;gap:9px;transition:.15s}
+.ucard:active{background:rgba(255,255,255,.07)}
+.uav{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#f1402f,#7950f2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:900;color:#fff;flex-shrink:0}
+.uinf{flex:1;min-width:0}
+.unm{font-size:13px;font-weight:700;color:#fff;display:flex;align-items:center;gap:5px}
+.uvip{font-size:9px;color:var(--gold);font-weight:800;background:rgba(255,215,0,.1);padding:1px 5px;border-radius:4px}
+.udtl{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ubal{font-size:15px;font-weight:900;color:var(--gold);margin-right:5px;flex-shrink:0}
+.bbtns{display:flex;gap:4px;flex-shrink:0}
+.bplus,.bminus{width:30px;height:30px;border-radius:8px;border:none;font-size:18px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
+.bplus{background:rgba(0,230,118,.15);color:var(--green)}
+.bminus{background:rgba(241,64,47,.15);color:#f1402f}
+.bplus:active,.bminus:active{transform:scale(.88)}
+
+/* ══ RESULT CONTROL ══ */
+.rc-wrap{padding:14px 12px 0}
+.rc-card{background:linear-gradient(135deg,#12122a,#1a1a38);border:1px solid rgba(255,215,0,.12);border-radius:16px;padding:16px}
+.rc-title{font-size:15px;font-weight:800;color:#fff;margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.rc-badge{font-size:10px;background:rgba(241,64,47,.2);color:#f1402f;padding:2px 8px;border-radius:6px;font-weight:700}
+.auto-row{display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.03);border-radius:10px;padding:10px 12px;margin-bottom:12px;border:1px solid var(--border)}
+.auto-row span{font-size:13px;color:rgba(255,255,255,.65)}
+.tog{width:46px;height:26px;background:rgba(255,255,255,.1);border-radius:13px;cursor:pointer;position:relative;border:none;transition:.3s}
+.tog.on{background:var(--green);box-shadow:0 0 12px rgba(0,230,118,.3)}
+.tog::after{content:'';width:22px;height:22px;background:#fff;border-radius:50%;position:absolute;top:2px;left:2px;transition:.3s;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.tog.on::after{left:22px}
+.rc-info-row{display:flex;gap:10px;margin-bottom:14px}
+.rc-info-box{flex:1;background:rgba(255,255,255,.03);border-radius:10px;padding:9px 12px;border:1px solid var(--border)}
+.rc-info-lbl{font-size:10px;color:rgba(255,255,255,.3);margin-bottom:3px}
+.rc-info-val{font-size:12px;font-weight:700;color:var(--gold)}
+
+.rc-balls-lbl{font-size:12px;color:rgba(255,255,255,.35);margin-bottom:10px}
+.rc-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:14px}
+.rcball{aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:#fff;cursor:pointer;border:3px solid transparent;transition:.2s;position:relative}
+.rcball:active{transform:scale(.9)}
+.rcball.sel{border-color:#fff;transform:scale(1.1);box-shadow:0 0 20px rgba(255,255,255,.3)}
+.rcball.sel::after{content:'✓';position:absolute;inset:0;background:rgba(255,255,255,.25);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px}
+
+.force-btn{width:100%;padding:14px;background:linear-gradient(135deg,#f1402f,#c0392b);border:none;border-radius:12px;color:#fff;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;box-shadow:0 4px 16px rgba(241,64,47,.3);transition:.15s;display:flex;align-items:center;justify-content:center;gap:6px}
+.force-btn:active{transform:scale(.97)}
+.rc-note{margin-top:10px;font-size:11px;color:rgba(255,255,255,.25);text-align:center;min-height:16px;line-height:1.4}
+.rc-note.success{color:var(--green)}
+
+/* FORCED RESULT STATUS */
+.forced-status{background:rgba(241,64,47,.1);border:1px solid rgba(241,64,47,.2);border-radius:10px;padding:10px 12px;margin-top:10px;display:none}
+.forced-status.show{display:flex;align-items:center;gap:8px}
+.fs-ico{font-size:18px}
+.fs-txt{font-size:12px;color:#f1402f;font-weight:700}
+
+/* ══ ALL BETS ══ */
+.bet-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 13px;margin:0 12px 7px;display:flex;align-items:center;justify-content:space-between;transition:.15s}
+.bet-card:active{background:rgba(255,255,255,.07)}
+.bc-left .bc-user{font-size:13px;font-weight:700;color:#fff}
+.bc-left .bc-det{font-size:11px;color:rgba(255,255,255,.3);margin-top:2px}
+.bc-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.bc-amt{font-size:14px;font-weight:800;color:var(--gold)}
+.bc-st{font-size:11px;font-weight:700;padding:3px 9px;border-radius:6px}
+.bc-st.win{background:rgba(0,230,118,.12);color:var(--green)}
+.bc-st.loss{background:rgba(241,64,47,.12);color:#f1402f}
+.bc-st.pending{background:rgba(255,215,0,.12);color:var(--gold)}
+
+/* ══ BAL MODAL ══ */
+.moverlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:flex;align-items:flex-end;opacity:0;pointer-events:none;transition:.25s}
+.moverlay.show{opacity:1;pointer-events:all}
+.msheet{background:#12122a;border:1px solid rgba(255,215,0,.1);border-radius:22px 22px 0 0;width:100%;max-width:430px;margin:0 auto;padding:22px 20px 36px;transform:translateY(100%);transition:.3s;text-align:center}
+.moverlay.show .msheet{transform:translateY(0)}
+.mhandle{width:40px;height:4px;background:rgba(255,255,255,.1);border-radius:2px;margin:0 auto 18px}
+.mic{font-size:44px;margin-bottom:10px}
+.mti{font-size:18px;font-weight:800;color:#fff;margin-bottom:5px}
+.mub{font-size:12px;color:rgba(255,255,255,.35);margin-bottom:18px}
+.mamt{width:100%;background:rgba(255,255,255,.07);border:1.5px solid rgba(255,255,255,.1);border-radius:12px;padding:13px;color:#fff;font-size:22px;font-weight:900;font-family:'Nunito',sans-serif;outline:none;text-align:center;margin-bottom:6px}
+.mamt:focus{border-color:var(--gold)}
+.quick-amts{display:flex;gap:6px;justify-content:center;margin-bottom:14px;flex-wrap:wrap}
+.qa{padding:6px 13px;background:rgba(255,255,255,.06);border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;color:rgba(255,255,255,.6);border:1px solid rgba(255,255,255,.08);transition:.15s;font-family:'Nunito',sans-serif}
+.qa:active{background:rgba(255,215,0,.15);color:var(--gold);border-color:var(--gold)}
+.apply-btn{width:100%;padding:13px;background:linear-gradient(135deg,#f1402f,#c0392b);border:none;border-radius:12px;color:#fff;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;cursor:pointer;margin-bottom:8px;box-shadow:0 4px 14px rgba(241,64,47,.3)}
+.apply-btn:active{transform:scale(.97)}
+.cancel-btn{width:100%;padding:11px;background:rgba(255,255,255,.05);border:none;border-radius:10px;color:rgba(255,255,255,.35);font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer}
+
+/* TOAST */
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%) translateY(80px);background:#1f2937;color:#fff;padding:11px 22px;border-radius:28px;font-size:13px;font-weight:700;z-index:700;transition:.3s;white-space:nowrap;max-width:92vw;text-align:center}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+/* LOADING */
+.loading{text-align:center;padding:30px;color:rgba(255,255,255,.2);font-size:13px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-logo">
+    <div class="hdr-lc">91</div>
+    <div class="hdr-title">ADMIN PANEL</div>
+  </div>
+  <span class="hdr-badge">ADMIN</span>
+  <button class="logout-btn" onclick="doLogout()">Logout</button>
+</div>
+
+<!-- LIVE STRIP -->
+<div class="live-strip">
+  <div class="live-left">
+    <div class="ldot"></div>
+    <span class="ltxt">Game LIVE — Running for all users</span>
+  </div>
+  <span class="live-period" id="livePeriod">—</span>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('overview',this)">📊 Overview</div>
+  <div class="tab" onclick="switchTab('users',this)">👥 Users</div>
+  <div class="tab" onclick="switchTab('result',this)">🎯 Result</div>
+  <div class="tab" onclick="switchTab('allbets',this)">📋 All Bets</div>
+</div>
+
+<!-- ══ OVERVIEW ══ -->
+<div class="acont active" id="ac-overview">
+  <div class="stats-grid">
+    <div class="sbox"><div class="sbox-val tr-y" id="st-users">0</div><div class="sbox-lbl">Total Users</div><div class="sbox-trend tr-g">↑ Registered</div></div>
+    <div class="sbox"><div class="sbox-val" id="st-bets">0</div><div class="sbox-lbl">Total Bets</div><div class="sbox-trend tr-y">All time</div></div>
+    <div class="sbox"><div class="sbox-val tr-g" id="st-bal">₹0</div><div class="sbox-lbl">Users Balance</div><div class="sbox-trend tr-g">Combined</div></div>
+    <div class="sbox"><div class="sbox-val" id="st-pending">0</div><div class="sbox-lbl">Pending Bets</div><div class="sbox-trend tr-r">This round</div></div>
+  </div>
+
+  <!-- LIVE GAME in admin -->
+  <div class="game-box">
+    <div class="gb-hdr">
+      <div class="gb-hdr-l">
+        <div class="ldot"></div>
+        LIVE GAME
+      </div>
+      <div class="gb-hdr-r">
+        <div class="gb-tlbl">Time Remaining</div>
+        <div class="gb-tdisp">
+          <div class="tblk" id="t1">0</div><div class="tblk" id="t2">0</div>
+          <div class="tsep">:</div>
+          <div class="tblk" id="t3">2</div><div class="tblk" id="t4">9</div>
+        </div>
+      </div>
+    </div>
+    <div class="gb-body">
+      <div class="gb-period">Period: <strong id="adminPeriod">—</strong></div>
+      <div class="gb-results">
+        <span class="gb-lbl">Last:</span>
+        <div id="adminBalls"></div>
+      </div>
+      <div class="gb-last">
+        <div>
+          <div class="gb-last-lbl">Last Result</div>
+          <div class="gb-last-num" id="lastResNum">—</div>
+        </div>
+        <div style="flex:1;margin-left:12px">
+          <div class="gb-last-lbl">Color</div>
+          <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,.6)" id="lastResColor">—</div>
+        </div>
+        <div>
+          <div class="gb-last-lbl">Big/Small</div>
+          <div style="font-size:13px;font-weight:700;color:rgba(255,255,255,.6)" id="lastResBigSm">—</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ USERS ══ -->
+<div class="acont" id="ac-users">
+  <div class="section-title">All Registered Users <span id="userCount">0 users</span></div>
+  <div id="userList"><div class="loading">Loading users...</div></div>
+</div>
+
+<!-- ══ RESULT CONTROL ══ -->
+<div class="acont" id="ac-result">
+  <div class="rc-wrap">
+    <div class="rc-card">
+      <div class="rc-title">🎯 Next Result Control <span class="rc-badge">ADMIN ONLY</span></div>
+
+      <div class="auto-row">
+        <span>🔄 Auto Random Mode</span>
+        <button class="tog on" id="autoTog" onclick="toggleAuto(this)"></button>
+      </div>
+
+      <div class="rc-info-row">
+        <div class="rc-info-box">
+          <div class="rc-info-lbl">Current Period</div>
+          <div class="rc-info-val" id="rcPeriod">—</div>
+        </div>
+        <div class="rc-info-box">
+          <div class="rc-info-lbl">Time Left</div>
+          <div class="rc-info-val" id="rcTime">—</div>
+        </div>
+      </div>
+
+      <div class="rc-balls-lbl">👇 Select which number to force next:</div>
+      <div class="rc-grid" id="rcGrid"></div>
+
+      <button class="force-btn" onclick="forceResult()">
+        ✅ Force This Result for Next Round
+      </button>
+
+      <div class="forced-status" id="forcedStatus">
+        <div class="fs-ico">🎯</div>
+        <div class="fs-txt" id="forcedTxt">—</div>
+      </div>
+
+      <div class="rc-note" id="rcNote">Auto ON — random result each round</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ ALL BETS ══ -->
+<div class="acont" id="ac-allbets">
+  <div class="section-title">All User Bets <span id="betsCount">Loading...</span></div>
+  <div id="betList"><div class="loading">Loading bets...</div></div>
+</div>
+
+<!-- BAL MODAL -->
+<div class="moverlay" id="balModal" onclick="closeBalModal(event)">
+  <div class="msheet">
+    <div class="mhandle"></div>
+    <div class="mic" id="bic">💰</div>
+    <div class="mti" id="bti">Add Balance</div>
+    <div class="mub" id="bub">User</div>
+    <input class="mamt" type="number" id="bamt" placeholder="0">
+    <div class="quick-amts">
+      <div class="qa" onclick="setQA(100)">₹100</div>
+      <div class="qa" onclick="setQA(500)">₹500</div>
+      <div class="qa" onclick="setQA(1000)">₹1K</div>
+      <div class="qa" onclick="setQA(5000)">₹5K</div>
+      <div class="qa" onclick="setQA(10000)">₹10K</div>
+    </div>
+    <button class="apply-btn" onclick="applyBal()">Apply Balance</button>
+    <button class="cancel-btn" onclick="closeBalModal()">Cancel</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, getDocs, query, orderBy, limit, increment, onSnapshot, where } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const app = initializeApp({
+  apiKey:"AIzaSyDB_ymNmTN9eFoY9amgRbLJoeTjRzF61HE",
+  authDomain:"club-5d681.firebaseapp.com",
+  projectId:"club-5d681",
+  storageBucket:"club-5d681.firebasestorage.app",
+  messagingSenderId:"424424836125",
+  appId:"1:424424836125:web:5ca5709b23bcea63228af4"
+});
+const db = getFirestore(app);
+const auth = getAuth(app);
+
+const BB = ['radial-gradient(circle at 40% 35%,#f1402f 40%,#7950f2)','radial-gradient(circle at 40% 35%,#38c976 50%,#1e8449)','radial-gradient(circle at 40% 35%,#f1402f 50%,#c0392b)','radial-gradient(circle at 40% 35%,#38c976 50%,#1e8449)','radial-gradient(circle at 40% 35%,#f1402f 50%,#c0392b)','radial-gradient(circle at 40% 35%,#38c976 40%,#7950f2)','radial-gradient(circle at 40% 35%,#f1402f 50%,#c0392b)','radial-gradient(circle at 40% 35%,#38c976 50%,#1e8449)','radial-gradient(circle at 40% 35%,#f1402f 50%,#c0392b)','radial-gradient(circle at 40% 35%,#38c976 50%,#1e8449)'];
+
+let CU = null;
+let gameDuration = 30;
+let timerInt = null;
+let autoMode = true;
+let selRCBall = null;
+let balUID = '', balAction = '';
+let allResults = [];
+
+// Wall-clock based timer — same as home.html
+function getGlobalSeconds(dur) {
+  return dur - (Math.floor(Date.now()/1000) % dur);
+}
+function genPeriod(dur) {
+  const slot = Math.floor(Date.now()/1000/dur);
+  const n = new Date();
+  return n.getFullYear().toString()+String(n.getMonth()+1).padStart(2,'0')+String(n.getDate()).padStart(2,'0')+String(dur).padStart(4,'0')+String(slot).padStart(8,'0');
+}
+
+// ── AUTH ──
+onAuthStateChanged(auth, async user => {
+  if (!user) { window.location.href = 'index.html'; return; }
+  const snap = await getDoc(doc(db,'users',user.uid));
+  if (!snap.exists() || !snap.data().isAdmin) { window.location.href = 'index.html'; return; }
+  CU = { uid: user.uid, ...snap.data() };
+  initAdmin();
+});
+
+const toast = msg => {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  clearTimeout(window._tt); window._tt=setTimeout(()=>t.classList.remove('show'),2600);
+};
+window.setQA = v => document.getElementById('bamt').value = v;
+
+function initAdmin() {
+  startTimer();
+  loadStats();
+  loadResults();
+  buildRCGrid();
+  startBetsListener();
+}
+
+// ── TIMER (synced to wall clock like home.html) ──
+function startTimer() {
+  if (timerInt) clearInterval(timerInt);
+  updateTimerDisplay();
+  timerInt = setInterval(updateTimerDisplay, 1000);
+}
+
+function updateTimerDisplay() {
+  const secs = getGlobalSeconds(gameDuration);
+  const m = String(Math.floor(secs/60)).padStart(2,'0');
+  const s = String(secs%60).padStart(2,'0');
+  ['t1','t2','t3','t4'].forEach((id,i) => {
+    const el=document.getElementById(id); if(!el) return;
+    const ch = i<2?m[i]:s[i-2];
+    if(el.textContent!==ch){el.textContent=ch;el.classList.add('blink');setTimeout(()=>el.classList.remove('blink'),150);}
+  });
+  const pid = genPeriod(gameDuration);
+  const lp=document.getElementById('livePeriod');if(lp)lp.textContent='Period: '+pid.slice(-8);
+  const rcp=document.getElementById('rcPeriod');if(rcp)rcp.textContent=pid.slice(-8);
+  const ap=document.getElementById('adminPeriod');if(ap)ap.textContent=pid.slice(-8);
+  const rct=document.getElementById('rcTime');if(rct)rct.textContent=m+':'+s;
+}
+
+// ── TABS ──
+window.switchTab = (tab, el) => {
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active')); el.classList.add('active');
+  document.querySelectorAll('.acont').forEach(c=>c.classList.remove('active'));
+  document.getElementById('ac-'+tab).classList.add('active');
+  if(tab==='users') loadUsers();
+  if(tab==='allbets') loadBets();
+  if(tab==='result') buildRCGrid();
+  loadStats();
+};
+
+// ── STATS ──
+async function loadStats() {
+  try {
+    const usn = await getDocs(collection(db,'users'));
+    const users = usn.docs.map(d=>d.data()).filter(u=>!u.isAdmin);
+    document.getElementById('st-users').textContent = users.length;
+    document.getElementById('userCount').textContent = users.length+' users';
+    document.getElementById('st-bal').textContent = '₹'+users.reduce((s,u)=>s+(u.balance||0),0).toFixed(0);
+    const bsn = await getDocs(collection(db,'bets'));
+    document.getElementById('st-bets').textContent = bsn.docs.length;
+    const pending = bsn.docs.filter(d=>d.data().status==='pending').length;
+    document.getElementById('st-pending').textContent = pending;
+  } catch(e){}
+}
+
+// ── RESULTS ──
+async function loadResults() {
+  try {
+    const sn = await getDocs(query(collection(db,'results'),orderBy('time','desc'),limit(10)));
+    allResults = sn.docs.map(d=>d.data());
+    renderAdminBalls();
+    if(allResults.length) {
+      const last = allResults[0];
+      document.getElementById('lastResNum').textContent = last.num;
+      document.getElementById('lastResColor').textContent = colorLabel(last.num);
+      document.getElementById('lastResBigSm').textContent = last.num>=5?'Big':'Small';
+    }
+  } catch(e){}
+}
+
+function renderAdminBalls() {
+  const el = document.getElementById('adminBalls'); if(!el) return;
+  el.innerHTML='';
+  el.style.display='flex'; el.style.gap='5px'; el.style.flexWrap='wrap';
+  allResults.slice(0,6).forEach(r=>{
+    const b=document.createElement('div');
+    b.className='ab-ball'; b.style.background=BB[r.num]; b.textContent=r.num;
+    el.appendChild(b);
+  });
+}
+
+function colorLabel(n){if(n===0)return 'Red+Violet';if(n===5)return 'Green+Violet';if([1,3,7,9].includes(n))return 'Green';return 'Red';}
+
+// ── USERS ──
+async function loadUsers() {
+  const list=document.getElementById('userList'); if(!list) return;
+  list.innerHTML='<div class="loading">Loading...</div>';
+  try {
+    const sn = await getDocs(collection(db,'users'));
+    const users = sn.docs.map(d=>({uid:d.id,...d.data()})).filter(u=>!u.isAdmin);
+    document.getElementById('userCount').textContent = users.length+' users';
+    if(!users.length){list.innerHTML='<div class="loading">No users yet</div>';return;}
+    list.innerHTML = users.map(u=>`
+      <div class="ucard">
+        <div class="uav">${u.name?u.name[0].toUpperCase():'?'}</div>
+        <div class="uinf">
+          <div class="unm">${u.name||'—'} <span class="uvip">VIP${u.vip||0}</span></div>
+          <div class="udtl">${u.phone||'—'} · XP:${u.xp||0} · ${u.joinDate||'—'}</div>
+        </div>
+        <div class="ubal">₹${parseFloat(u.balance||0).toFixed(0)}</div>
+        <div class="bbtns">
+          <button class="bplus" onclick="openBal('${u.uid}','${(u.name||'').replace(/'/g,'')}',${u.balance||0},'add')" title="Add Balance">+</button>
+          <button class="bminus" onclick="openBal('${u.uid}','${(u.name||'').replace(/'/g,'')}',${u.balance||0},'sub')" title="Deduct Balance">−</button>
+        </div>
+      </div>`).join('');
+  } catch(e){list.innerHTML='<div class="loading" style="color:#f1402f">Error: Check Firestore rules</div>';}
+}
+
+// ── ALL BETS ──
+async function loadBets() {
+  const list=document.getElementById('betList'); if(!list) return;
+  list.innerHTML='<div class="loading">Loading...</div>';
+  try {
+    const sn = await getDocs(query(collection(db,'bets'),orderBy('time','desc'),limit(50)));
+    document.getElementById('betsCount').textContent = sn.docs.length+' total';
+    if(!sn.docs.length){list.innerHTML='<div class="loading">No bets yet</div>';return;}
+    list.innerHTML = sn.docs.map(d=>{
+      const b=d.data();
+      return `<div class="bet-card">
+        <div class="bc-left">
+          <div class="bc-user">${b.userName||'—'}</div>
+          <div class="bc-det">${b.choice} × X${b.mult} · Period:${(b.period||'—').slice(-6)} · ${b.time?new Date(b.time).toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}):'—'}</div>
+        </div>
+        <div class="bc-right">
+          <div class="bc-amt">₹${b.total}</div>
+          <div class="bc-st ${b.status}">${b.status==='win'?'WIN':b.status==='loss'?'LOSS':'WAIT'}</div>
+        </div>
+      </div>`;
+    }).join('');
+  } catch(e){list.innerHTML='<div class="loading" style="color:#f1402f">Error loading bets</div>';}
+}
+
+// Real-time bets update
+function startBetsListener() {
+  onSnapshot(query(collection(db,'bets'),orderBy('time','desc'),limit(3)), ()=>{
+    loadStats();
+    loadResults();
+    if(document.getElementById('ac-allbets').classList.contains('active')) loadBets();
+  });
+}
+
+// ── BALANCE CONTROL ──
+window.openBal = (uid,name,bal,action) => {
+  balUID=uid; balAction=action;
+  document.getElementById('bic').textContent=action==='add'?'💰':'💸';
+  document.getElementById('bti').textContent=action==='add'?'Add Balance':'Deduct Balance';
+  document.getElementById('bub').textContent=`${name} · Current Balance: ₹${parseFloat(bal).toFixed(2)}`;
+  document.getElementById('bamt').value='';
+  document.getElementById('balModal').classList.add('show');
+};
+window.closeBalModal = e => { if(!e||e.target.id==='balModal') document.getElementById('balModal').classList.remove('show'); };
+
+window.applyBal = async () => {
+  const amt=parseFloat(document.getElementById('bamt').value);
+  if(!amt||amt<=0){toast('Enter valid amount');return;}
+  try {
+    const change = balAction==='add' ? amt : -amt;
+    await updateDoc(doc(db,'users',balUID),{balance:increment(change)});
+    toast(`✅ ${balAction==='add'?'+':'-'}₹${amt} applied successfully`);
+    document.getElementById('balModal').classList.remove('show');
+    if(document.getElementById('ac-users').classList.contains('active')) loadUsers();
+    loadStats();
+  } catch(e){toast('❌ Error: '+e.message);}
+};
+
+// ── RESULT CONTROL (via Firestore gameControl doc) ──
+function buildRCGrid() {
+  const g=document.getElementById('rcGrid'); if(!g) return; g.innerHTML='';
+  for(let i=0;i<10;i++){
+    const b=document.createElement('div');
+    b.className='rcball'; b.style.background=BB[i]; b.textContent=i;
+    b.onclick=()=>{
+      document.querySelectorAll('.rcball').forEach(x=>x.classList.remove('sel'));
+      b.classList.add('sel'); selRCBall=i;
+      document.getElementById('rcNote').textContent=`Number ${i} selected (${colorLabel(i)}) — press Force button`;
+      document.getElementById('rcNote').className='rc-note';
+    };
+    g.appendChild(b);
+  }
+}
+
+window.toggleAuto = btn => {
+  autoMode=!autoMode; btn.classList.toggle('on',autoMode);
+  document.getElementById('rcNote').textContent=autoMode?'Auto ON — random result each round':'Auto OFF — select a number and press Force';
+  if(autoMode){
+    // Remove forced result
+    setDoc(doc(db,'gameControl','forcedResult'),{active:false,number:null,period:'',setAt:new Date().toISOString()}).catch(()=>{});
+    document.getElementById('forcedStatus').classList.remove('show');
+  }
+};
+
+window.forceResult = async () => {
+  if(selRCBall===null){toast('⚠️ Select a number first!');return;}
+  const pid = genPeriod(gameDuration);
+  try {
+    await setDoc(doc(db,'gameControl','forcedResult'),{
+      active:true, number:selRCBall, period:pid,
+      setAt:new Date().toISOString(), setBy:CU.uid
+    });
+    autoMode=false;
+    document.getElementById('autoTog').classList.remove('on');
+    const noteEl=document.getElementById('rcNote');
+    noteEl.textContent=`✅ Forced: Number ${selRCBall} will appear in next round (Period: ${pid.slice(-8)})`;
+    noteEl.className='rc-note success';
+    const fsEl=document.getElementById('forcedStatus');
+    document.getElementById('forcedTxt').textContent=`Next result forced: ${selRCBall} (${colorLabel(selRCBall)}) for period ${pid.slice(-8)}`;
+    fsEl.classList.add('show');
+    toast(`✅ Result ${selRCBall} forced for next round!`);
+  } catch(e){toast('❌ Error: '+e.message);}
+};
+
+// ── LOGOUT ──
+window.doLogout = async () => {
+  clearInterval(timerInt);
+  await signOut(auth);
+  sessionStorage.removeItem('cu');
+  window.location.href='index.html';
+};
+</script>
+</body>
+</html>
