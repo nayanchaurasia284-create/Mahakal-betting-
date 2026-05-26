@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>91 CLUB</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@600;700;800;900&family=Rajdhani:wght@600;700&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--red:#f1402f;--green:#38c976;--violet:#7950f2;--gold:#f5a623;--bg:#f5f5f5}
+body{font-family:'Nunito',sans-serif;background:var(--bg);max-width:430px;margin:0 auto;min-height:100vh;overflow-x:hidden}
+
+/* HEADER */
+.hdr{background:#fff;height:50px;display:flex;align-items:center;justify-content:space-between;padding:0 14px;position:sticky;top:0;z-index:100;box-shadow:0 1px 8px rgba(0,0,0,.08)}
+.hdr-logo{display:flex;align-items:center;gap:2px}
+.hdr-logo .ic{width:28px;height:28px;background:var(--red);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:900;color:#fff}
+.hdr-logo .nm{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--red);letter-spacing:.5px}
+.hdr-right{display:flex;gap:8px}
+.hdr-ico{width:32px;height:32px;border-radius:50%;background:#f5f5f5;border:none;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer}
+
+/* BANNER */
+.banner{margin:10px 12px;background:linear-gradient(135deg,#f1402f,#c0392b);border-radius:14px;padding:14px 16px;display:flex;align-items:center;justify-content:space-between;overflow:hidden;position:relative}
+.banner::before{content:'';position:absolute;right:-20px;top:-20px;width:100px;height:100px;background:rgba(255,255,255,.08);border-radius:50%}
+.banner-txt h3{font-size:15px;font-weight:800;color:#fff}
+.banner-txt p{font-size:11px;color:rgba(255,255,255,.75);margin-top:3px}
+.banner-btn{background:#fff;color:var(--red);border:none;border-radius:20px;padding:6px 14px;font-size:12px;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;flex-shrink:0}
+
+/* NOTICE */
+.notice-bar{margin:0 12px 10px;background:#fff;border-radius:10px;padding:8px 12px;display:flex;align-items:center;gap:8px;box-shadow:0 1px 6px rgba(0,0,0,.05)}
+.notice-bar span{font-size:16px;flex-shrink:0}
+.notice-bar p{font-size:11px;color:#555;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.notice-bar .det{background:var(--red);color:#fff;font-size:10px;font-weight:700;padding:3px 8px;border-radius:6px;flex-shrink:0}
+
+/* MAIN LAYOUT */
+.main-layout{display:flex;gap:0;margin:0 0 10px}
+
+/* LEFT SIDEBAR */
+.sidebar{width:68px;flex-shrink:0;background:#fff;display:flex;flex-direction:column;align-items:center;padding:8px 0;gap:2px;border-right:1px solid #f0f0f0}
+.sb-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px;cursor:pointer;width:100%;transition:.15s;border-radius:0}
+.sb-item.active{background:#fff0ef}
+.sb-item .sb-ico{font-size:22px}
+.sb-item .sb-lbl{font-size:10px;font-weight:700;color:#555;text-align:center}
+.sb-item.active .sb-lbl{color:var(--red)}
+
+/* GAME CARDS */
+.game-cards{flex:1;padding:8px 10px 8px 8px;display:flex;flex-direction:column;gap:8px;overflow-y:auto}
+.gcard{background:linear-gradient(135deg,#ff6b6b,#f1402f);border-radius:14px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:.15s;position:relative;overflow:hidden;min-height:72px}
+.gcard:active{transform:scale(.97)}
+.gcard::before{content:'';position:absolute;right:-10px;top:-10px;width:80px;height:80px;background:rgba(255,255,255,.08);border-radius:50%}
+.gcard.blue{background:linear-gradient(135deg,#667eea,#764ba2)}
+.gcard.orange{background:linear-gradient(135deg,#f97316,#c2410c)}
+.gcard.teal{background:linear-gradient(135deg,#06b6d4,#0891b2)}
+.gcard-info{flex:1}
+.gcard-name{font-size:17px;font-weight:900;color:#fff;letter-spacing:.5px}
+.gcard-sub{font-size:10px;color:rgba(255,255,255,.8);margin-top:2px}
+.gcard-tag{font-size:10px;color:rgba(255,255,255,.7);margin-top:4px}
+.gcard-img{font-size:40px;flex-shrink:0;filter:drop-shadow(0 2px 8px rgba(0,0,0,.2))}
+
+/* BOTTOM NAV */
+.bnav{background:#fff;border-top:1px solid #eee;display:flex;padding:4px 0 10px;position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;z-index:90;box-shadow:0 -2px 10px rgba(0,0,0,.06)}
+.bnt{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 4px;cursor:pointer;font-size:10px;font-weight:700;color:#bbb;transition:.15s;position:relative}
+.bnt.active{color:var(--red)}
+.bni{font-size:20px}
+.bnt-center{margin-top:-20px}
+.bnt-center .bni-wrap{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--red),#c0392b);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(241,64,47,.4)}
+.bnt-center .bni{font-size:22px;color:#fff}
+
+/* SPACER */
+.spacer{height:80px}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-logo">
+    <div class="ic">91</div>
+    <div class="nm">91CLUB</div>
+  </div>
+  <div class="hdr-right">
+    <button class="hdr-ico" onclick="go('wallet.html')">💰</button>
+    <button class="hdr-ico" onclick="go('profile.html')">👤</button>
+  </div>
+</div>
+
+<!-- BANNER -->
+<div class="banner">
+  <div class="banner-txt">
+    <h3>Welcome Bonus 🎉</h3>
+    <p>Register & get ₹100 free to play!</p>
+  </div>
+  <button class="banner-btn" onclick="go('refer.html')">Refer & Earn</button>
+</div>
+
+<!-- NOTICE -->
+<div class="notice-bar">
+  <span>📢</span>
+  <p>Welcome to 91Club! Wish all customers good experience playing game.</p>
+  <div class="det">Detail</div>
+</div>
+
+<!-- MAIN LAYOUT -->
+<div class="main-layout">
+  <!-- SIDEBAR -->
+  <div class="sidebar">
+    <div class="sb-item active">
+      <span class="sb-ico">🎰</span>
+      <span class="sb-lbl">Lottery</span>
+    </div>
+    <div class="sb-item">
+      <span class="sb-ico">🎮</span>
+      <span class="sb-lbl">Mini games</span>
+    </div>
+    <div class="sb-item">
+      <span class="sb-ico">🏆</span>
+      <span class="sb-lbl">Popular</span>
+    </div>
+    <div class="sb-item">
+      <span class="sb-ico">🎰</span>
+      <span class="sb-lbl">Slots</span>
+    </div>
+    <div class="sb-item">
+      <span class="sb-ico">🎣</span>
+      <span class="sb-lbl">Fishing</span>
+    </div>
+  </div>
+
+  <!-- GAME CARDS -->
+  <div class="game-cards">
+    <div class="gcard" onclick="go('wingo.html')">
+      <div class="gcard-info">
+        <div class="gcard-name">Win Go</div>
+        <div class="gcard-sub">Guess Number</div>
+        <div class="gcard-tag">Green/Red/Purple to win</div>
+      </div>
+      <div class="gcard-img">🎯</div>
+    </div>
+    <div class="gcard blue" onclick="go('wingo.html')">
+      <div class="gcard-info">
+        <div class="gcard-name">Trx Win</div>
+        <div class="gcard-sub">Guess Number</div>
+        <div class="gcard-tag">Green/Red/Purple to win</div>
+      </div>
+      <div class="gcard-img">💎</div>
+    </div>
+    <div class="gcard orange" onclick="go('wingo.html')">
+      <div class="gcard-info">
+        <div class="gcard-name">K3</div>
+        <div class="gcard-sub">Guess Number</div>
+        <div class="gcard-tag">Big/Small/Odd/Even</div>
+      </div>
+      <div class="gcard-img">🎲</div>
+    </div>
+    <div class="gcard teal" onclick="go('wingo.html')">
+      <div class="gcard-info">
+        <div class="gcard-name">5D</div>
+        <div class="gcard-sub">Guess Number</div>
+        <div class="gcard-tag">Big/Small/Odd/Even</div>
+      </div>
+      <div class="gcard-img">🎱</div>
+    </div>
+  </div>
+</div>
+
+<div class="spacer"></div>
+
+<!-- BOTTOM NAV -->
+<div class="bnav">
+  <div class="bnt active"><span class="bni">🏠</span>Home</div>
+  <div class="bnt" onclick="go('wallet.html')"><span class="bni">📊</span>Activity</div>
+  <div class="bnt bnt-center" onclick="go('wingo.html')">
+    <div class="bni-wrap"><span class="bni">▼</span></div>
+    <span style="font-size:10px;font-weight:700;color:#bbb;margin-top:2px">Play</span>
+  </div>
+  <div class="bnt" onclick="go('wallet.html')"><span class="bni">💰</span>Wallet</div>
+  <div class="bnt" onclick="go('profile.html')"><span class="bni">👤</span>Account</div>
+</div>
+
+<script>
+window.go = url => window.location.href = url;
+// Auth check
+const cu = sessionStorage.getItem('cu');
+if (!cu) window.location.href = 'index.html';
+</script>
+</body>
+</html>
